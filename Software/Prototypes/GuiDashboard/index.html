@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en-gb">
+    <head>
+		<title>Hive Sense V1 Demo</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link href="css/bootstrap_blr.css" rel="stylesheet" media="screen" />
+		<link href="css/main.css" rel="stylesheet" media="screen" />
+		<style>
+
+		</style>
+		<link href="css/bootstrap-responsive.css" rel="stylesheet" media="screen">
+    </head>
+    <body>
+
+		<div class="navbar navbar-static-top">
+			<div class="navbar-inner">
+				<div class="container">
+					<button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<a class="brand" href="./">HiveSenseV1</a>
+					<div class="nav-collapse collapse">
+						<ul class="nav">
+							<li id="li-home" class="active"><a href="#">Home</a></li>
+							<li id="li-graphs"><a href="#">Graphs</a></li>
+							<li id="li-history"><a href="#">History</a></li>
+							<li id="li-about"><a href="#">About</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="home" class="container">
+			<h1 id="top">Live Demo Data from Hive UCL</h1>
+
+			<div class="row">
+				<div class="span3">
+
+					<h3>Alarms</h3>
+					<table class="table-hover">
+						<tbody>
+							<tr>
+								<td><img id="alarm-swarming" src="img/LED_Blue.png" alt="" /></td>
+								<td>Swarming</td>
+							</tr>
+							<tr>
+								<td><img id="alarm-temp-low" src="img/LED_Blue.png" alt="" /></td>
+								<td data-toggle="tooltip" title="Temperature &lt; x C">Too Cold</td>
+							</tr>
+							<tr>
+								<td><img id="alarm-temp-high" src="img/LED_Blue.png" alt="" /></td>
+								<td>Too Hot</td>
+							</tr>
+							<tr>
+								<td><img id="alarm-humi-high" src="img/LED_Blue.png" alt="" /></td>
+								<td>Too Humid</td>
+							</tr>
+							<tr>
+								<td><img id="alarm-light-high" src="img/LED_Blue.png" alt="" /></td>
+								<td>Too Bright</td>
+							</tr>
+							<tr>
+								<td><img id="alarm-moving" src="img/LED_Blue.png" alt="" /></td>
+								<td>Disturbance</td>
+							</tr>
+						</tbody>
+					</table>
+
+					<h3>Recent Activity</h3>
+					<table class="table-striped">
+						<tbody>
+							<tr>
+								<td class="timeList">HH:mm</td>
+								<td>Hive Opened</td>
+							</tr>
+							<tr>
+								<td class="timeList">HH:mm</td>
+								<td>Hive Closed</td>
+							</tr>
+							<tr>
+								<td class="timeList">HH:mm</td>
+								<td>Hive felled</td>
+							</tr>
+						</tbody>
+					</table>
+
+					<h3>Local Weather</h3>
+					<div class="subtle">Heathrow, <span id="weather-time">HH:mm zzz</span></div>
+					<span id="weather-weather">Unknown, x &deg;C</span>
+
+					<div>
+						<h3>Unit Selection</h3>
+						<label class="radio">
+							<input type="radio" name="units" id="unit_EU" value="EU" checked />
+							Metric
+						</label>
+						<label class="radio">
+							<input type="radio" name="units" id="unit_US" value="US" />
+							Imperial
+						</label>
+					</div>
+				</div>
+				<div class="span9">
+					<div class="high-line">
+						<span id="updated-led" class="badge badge-success">&nbsp;</span>
+						<span id="updated-date">DDDD dds MMMM, HH:mm zzz</span>
+						<span class="subtle">&nbsp; <span id="updated-ago" >x tttt</span> ago</span>
+					</div>
+					<div class="row-fluid">
+						<div class="span6">
+							<div class="row-fluid">
+								<div class="span12 sensor sensor-temperature">
+									<div class="span4 bg-sensor bg-temperature">
+										&nbsp;
+									</div>
+									<div class="span8 text-center">
+										<div class="high-line subtle">
+											<span id="sensor-value-temp1" class="sensor-value-text">xx.x C</span> in
+											<span id="sensor-trend-temp1" class="arrow-level trend-arrow">&#x25ac;</span>
+										</div>
+										<div class="high-line subtle">
+											<span id="sensor-value-temp2" class="sensor-value-text">xx.x C</span> out
+											<span id="sensor-trend-temp2" class="arrow-level trend-arrow">&#x25ac;</span>
+										</div>
+										<div class="high-line subtle">
+											<span id="sensor-value-temp3" class="sensor-value-text">+x.x C</span> diff
+											<span id="sensor-trend-temp3" class="arrow-level trend-arrow">&#x25ac;</span>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+						<div id="sensor-graph-temp" class="span6"></div>
+					</div>
+
+					<div class="row-fluid">
+						<div class="span6">
+							<div class="row-fluid">
+								<div class="span12 sensor sensor-humidity">
+									<div class="span5 bg-sensor bg-humidity">
+										&nbsp;
+									</div>
+									<div class="span7 text-center text-sensor">
+										<div class="high-line subtle">
+											<span id="sensor-value-humi" class="sensor-value-text">xx %</span> in
+											<span id="sensor-trend-humi" class="arrow-level trend-arrow">&#x25ac;</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div id="sensor-graph-humi" class="span6"></div>
+					</div>
+
+					<div class="row-fluid">
+						<div class="span6">
+							<div class="row-fluid">
+								<div class="span12 sensor sensor-light">
+									<div class="span5 bg-sensor bg-light">
+										&nbsp;
+									</div>
+									<div class="span7 text-center text-sensor">
+										<div class="high-line subtle">
+											<span id="sensor-value-light" class="sensor-value-text">xx %</span> in
+											<span id="sensor-trend-light" class="arrow-level trend-arrow">&#x25ac;</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div id="sensor-graph-light" class="span6"></div>
+					</div>
+
+					<div class="row-fluid">
+						<div class="span6">
+							<div class="row-fluid">
+								<div class="span12 sensor sensor-motion">
+									<div class="span5 bg-sensor bg-hive">
+										&nbsp;
+									</div>
+									<div class="span7 text-center text-sensor">
+										<span id="sensor-value-motion" class="motion-no sensor-value-text">Stationary</span>
+										<br />
+										<span id="sensor-trend-motion" class="subtle">Last motion HH:mm, DDDD</span>
+									</div>
+								</div>
+							</div>
+
+						</div>
+						<div class="span6">
+							<img id="camera" class="img-rounded" src="img/camLatest.bmp" alt="hive pic" width="260" />
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+
+		<div class="hiddenTab container" id="about">
+			<h1 id="top2">About HiveSense</h1>
+			<div class="row">
+				<div class="span2">
+					Sidebar
+				</div>
+				<div class="span10">
+					Bee-friendly monitoring systems.<br />
+					Coming soon to a hive near you.
+
+					<h2>WARNING!</h2>
+					When no live data feed is available, graphs may be empty.<br />
+					This web application may change drastically at any time, without notice.
+
+					<h2>Credits</h2>
+					<ul class="unstyled">
+						<li>Graphs built with <a href="https://github.com/flot/flot">flot</a></li>
+						<li>Hardware (<a href="http://www.netmf.com/gadgeteer/">Gadgeteer</a>) from Microsoft</li>
+						<li>Some CSS and JS from <a href="https://github.com/twitter/bootstrap/">Bootstrap</a> was used to aid UI design, and improve UX.</li>
+						<li>General and financial support from UCL and Microsoft</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="hiddenTab container" id="history">
+			<h1 id="top3">Historical Hive Data</h1>
+			<div class="row">
+				<div class="span2">
+					Sidebar
+				</div>
+				<div class="span10">
+					To do
+				</div>
+			</div>
+		</div>
+		<div class="container hiddenTab" id="graphs">
+			<h1 id="top4">Recent Graphs</h1>
+			<div class="row">
+				<div class="span2">
+					<div id="graphs-options-variables">
+						<h5>Variables</h5>
+					</div>
+					<div id="graphs-options-periods">
+						<h5>Period</h5>
+						<label class="radio"><input type="radio" name="period" value="3h" checked />24 Hrs</label>
+						<label class="radio"><input type="radio" name="period" value="1d" />7 days</label>
+						<label class="radio"><input type="radio" name="period" value="31d" />31 days</label>
+						<label class="radio"><input type="radio" name="period" value="6m" />6 months</label>
+					</div>
+				</div>
+				<div class="span10">
+					<div id="sensor-graph-main"></div>
+				</div>
+			</div>
+		</div>
+
+
+		<div class="container-fluid">
+			<div class="row-fluid">
+				<div class="span12 footer">
+					<div>HiveSenseV1</div>
+					<div>&copy; 2013 Ben Lee-Rodgers, UCL, London</div>
+					<div><a href="#top">Top</a> | Contact: b.lee-rodgers.12 [at] ucl.ac.uk</div>
+					<div>Caution: Site is under development; data may be faked for prototyping purposes</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- External or imported Libraries -->
+
+		<!-- Connection to Azure service -->
+		<script src="https://hivesense.azure-mobile.net/client/MobileServices.Web-1.0.0.min.js"></script>
+
+		<!-- Utility and UI -->
+		<script src="http://code.jquery.com/jquery.js"></script>
+
+		<script src="js/bootstrap.min.js"></script>
+		<script src="js/libs/jquery.dateFormat-1.0.js"></script> <!-- Source: https://github.com/phstc/jquery-dateFormat -->
+
+		<!-- Graphing -->
+		<script src="js/libs/flotGraphs/jquery.flot.js"></script>
+		<script src="js/libs/flotGraphs/jquery.flot.time.js"></script>
+
+		<!-- Connection to "internet of things" - Xively -->
+		<script src="http://d23cj0cdvyoxg0.cloudfront.net/xivelyjs-1.0.4.min.js"></script>
+
+
+		<!-- Scripts made for this project -->
+
+		<script src="js/graphs.js"></script>
+		<script src="js/main.js"></script>
+
+    </body>
+</html>

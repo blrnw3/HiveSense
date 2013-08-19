@@ -1,0 +1,10 @@
+Resources/SampleReports/
+Resources/misc/
+Resources/Hardware_res/
+Report/researchPapers/
+
+bin/
+obj/
+
+*.tinyfnt
+*.suo

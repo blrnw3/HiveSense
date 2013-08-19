@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Located on the SD card within /hivesense directory. This sample copy is included here for convenience. -->
+<config>
+  <!-- Network Settings for wifi -->
+  <SSID>CSSTUDENT</SSID>
+  <password>GowerStreet6BT</password>
+
+  <!-- Frequency of readings in seconds (must exceed 5) -->
+  <updateRate>30</updateRate>
+
+  <!-- Movement detection threshold: -7.9 is most sensitive, +7.9 is least -->
+  <sensitivity>-7</sensitivity>
+
+  <!-- URL of the web server running the API to receive the data -->
+  <server>http://hivesensenodejs.azurewebsites.net/posty</server>
+</config>

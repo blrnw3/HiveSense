@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="HiveSenseV2.APIconnector">
+    <Position X="4.5" Y="2.75" Width="2.5" />
+    <Members>
+      <Method Name="APIconnector" Hidden="true" />
+      <Method Name="dataLineToAPIFormat" Hidden="true" />
+      <Method Name="jsonWrap" Hidden="true" />
+      <Method Name="zerolead" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAEAgAQAAAACAIAAAAAAAAACAIAACAQAAAAAAAAAAA=</HashCode>
+      <FileName>Model\APIconnector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HiveSenseV2.HttpHandler">
+    <Position X="6.25" Y="6.25" Width="2" />
+    <Members>
+      <Method Name="CreateRequest" Hidden="true" />
+      <Method Name="HandleResponse" Hidden="true" />
+      <Method Name="HttpHandler" Hidden="true" />
+      <Method Name="Send" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>ABAAgAABAAgAAAQgAEAAAAAAAAAIAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Util\HttpHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HiveSenseV2.Program">
+    <Position X="6" Y="0.5" Width="2.75" />
+    <Members>
+      <Field Name="accelerometer" Hidden="true" />
+      <Field Name="api" Hidden="true" />
+      <Field Name="barometer" Hidden="true" />
+      <Field Name="button" Hidden="true" />
+      <Method Name="buttonPressed" Hidden="true" />
+      <Field Name="camera" Hidden="true" />
+      <Method Name="dataIsSendable" Hidden="true" />
+      <Method Name="InitializeModules" Hidden="true" />
+      <Field Name="lightSensor" Hidden="true" />
+      <Method Name="Main" Hidden="true" />
+      <Method Name="ProgramStarted" Hidden="true" />
+      <Field Name="sdCard" Hidden="true" />
+      <Field Name="sdHandle" Hidden="true" />
+      <Field Name="sensorsHandle" Hidden="true" />
+      <Field Name="temperatureHumidity" Hidden="true" />
+      <Field Name="timeManager" Hidden="true" />
+      <Method Name="timer_Tick" Hidden="true" />
+      <Field Name="usbClientDP" Hidden="true" />
+      <Field Name="wifi_RS21" Hidden="true" />
+      <Field Name="wifiHandle" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAQgAABAAgAAAAAIAAAAAAAAAYIAMEBAACIIBAAFQUI=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HiveSenseV2.SdHandler">
+    <Position X="1.75" Y="2.75" Width="2.5" />
+    <Members>
+      <Field Name="api" Hidden="true" />
+      <Field Name="configFilePath" Hidden="true" />
+      <Field Name="dateVariables" Hidden="true" />
+      <Method Name="deleteBufferLog" Hidden="true" />
+      <Method Name="disposeOfSD" Hidden="true" />
+      <Field Name="sdCard" Hidden="true" />
+      <Method Name="sdCard_SDCardMounted" Hidden="true" />
+      <Method Name="sdCard_SDCardUnmounted" Hidden="true" />
+      <Method Name="SdHandler" Hidden="true" />
+      <Field Name="sensorHandle" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAQABAAAAAggIAACAQAAAAAQCAEAACIgACACIAgAAAA=</HashCode>
+      <FileName>Model\SdHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HiveSenseV2.SensorsHandler">
+    <Position X="9.75" Y="2.75" Width="2.5" />
+    <Members>
+      <Method Name="accelerometer_ThresholdExceeded" Hidden="true" />
+      <Field Name="accelSensor" Hidden="true" />
+      <Method Name="barometer_MeasurementComplete" Hidden="true" />
+      <Field Name="camera" Hidden="true" />
+      <Method Name="getDataPt" Hidden="true" />
+      <Field Name="hum" Hidden="true" />
+      <Field Name="image" Hidden="true" />
+      <Field Name="light" Hidden="true" />
+      <Field Name="lightSensor" Hidden="true" />
+      <Field Name="motion" Hidden="true" />
+      <Method Name="pictureCaptured" Hidden="true" />
+      <Method Name="SensorsHandler" Hidden="true" />
+      <Field Name="t1" Hidden="true" />
+      <Field Name="t2" Hidden="true" />
+      <Field Name="tdiff" Hidden="true" />
+      <Field Name="temp2Sensor" Hidden="true" />
+      <Method Name="temperatureHumidity_MeasurementComplete" Hidden="true" />
+      <Field Name="tempHumiSensor" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>ACAAAAiAggAAAACAAAAAAEABEJIAAAAAAAgQBAgAAAA=</HashCode>
+      <FileName>Model\SensorsHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HiveSenseV2.TimeManager">
+    <Position X="12.5" Y="2.75" Width="2" />
+    <Members>
+      <Method Name="syncResponseHandle" Hidden="true" />
+      <Method Name="TimeManager" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAIAAAAAAAAABAAAAIAAQAAAAAAAAEAAAI=</HashCode>
+      <FileName>Model\TimeManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HiveSenseV2.Utility">
+    <Position X="12.75" Y="6.75" Width="2.25" />
+    <Members>
+      <Method Name="ByteToHex" Hidden="true" />
+      <Method Name="GetMACAddress" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAACAAAAAAAAAAAEACAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Util\Utility.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HiveSenseV2.WifiHandler">
+    <Position X="7.25" Y="2.75" Width="2.25" />
+    <Members>
+      <Method Name="getWifiChipMACAddress" Hidden="true" />
+      <Method Name="joinNetwork" Hidden="true" />
+      <Method Name="networkScanDebug" Hidden="true" />
+      <Field Name="timemanager" Hidden="true" />
+      <Method Name="timerWifiJoin_Tick" Hidden="true" />
+      <Field Name="wifiModule" Hidden="true" />
+      <Method Name="wirelessConnectivityChanged" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAASAAAAAIAAAAAAAAAAAAAAIAQAAAAABCAAAAAAAg=</HashCode>
+      <FileName>Model\WifiHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HiveSenseV2.Xml">
+    <Position X="4.25" Y="6.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAA=</HashCode>
+      <FileName>Util\Xml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HiveSenseV2.Channel">
+    <Position X="10" Y="5.25" Width="1.75" />
+    <Members>
+      <Method Name="Channel" Hidden="true" />
+    </Members>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAQAEAAAAA=</HashCode>
+      <FileName>Model\Channel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HiveSenseV2.Config">
+    <Position X="1.25" Y="6.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAIAAAIIAAAAAAABAAAAAMABAAAAQAAAAAAACEA=</HashCode>
+      <FileName>Model\Config.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

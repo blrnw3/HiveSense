@@ -1,0 +1,132 @@
+/*
+    Document   : main
+    Created on : 01-Jul-2013, 16:27:22
+    Author     : Ben LR
+    Description:
+        All custom (not bootstrap-related) css for HiveSense.
+*/
+
+td img {
+	padding-right: 0.7em;
+}
+
+#sensor-graph-main {
+	width: 600px;
+	height: 400px;
+}
+
+#sensor-graph-temp {
+	width: 260px;
+	height: 200px;
+}
+#sensor-graph-humi {
+	width: 260px;
+	height: 150px;
+}
+#sensor-graph-light {
+	width: 260px;
+	height: 150px;
+}
+
+.hiddenTab {
+	display: none;
+}
+
+.subtle {
+	color: #777;
+}
+.high-line {
+	line-height: 3.5em;
+}
+
+.timeList {
+	padding-right: 0.8em;
+}
+
+.sensor {
+	border-radius: 20px 20px;
+	border-width: 1px;
+	border-style: solid;
+	padding: 1em;
+}
+.sensor-temperature {
+	border-color: #ffd5d7;
+	background-color: #fffcfd;
+}
+.sensor-humidity {
+	border-color: #d5ffd7;
+	background-color: #fcfffd;
+}
+.sensor-light {
+	border-color: #F6F4C8;
+	background-color: #FFFFEF;
+}
+.sensor-motion {
+	border-color: #EFCAF8;
+	background-color: #FEF7FF;
+}
+
+.sensor-value-text {
+	font-size: 200%;
+	font-weight: bold;
+	text-align: center;
+	color: #201;
+	text-shadow: 4px 3px whitesmoke;
+}
+.text-sensor {
+	padding-top: 2em;
+}
+
+.bg-sensor {
+	background-position: center;
+	background-repeat: no-repeat;
+}
+.bg-temperature {
+	background-image: url(../img/thermometer.png);
+	background-size: 160px;
+	padding: 5em 0em;
+}
+.bg-humidity {
+	background-image: url(../img/raindrop.png);
+	background-size: 100px;
+	padding: 3em 0em;
+}
+.bg-light {
+	background-image: url(../img/light1.png);
+	background-size: 100px;
+	padding: 3em 0em;
+}
+.bg-hive {
+	background-image: url(../img/hive.png);
+	background-size: 90px;
+	padding: 3em 0em;
+}
+
+.trend-arrow {
+	font-size: 150%
+}
+.arrow-up {
+	color: #4a3;
+}
+.arrow-down {
+	color: #a43;
+}
+.arrow-level {
+	color: #34a;
+}
+
+.motion-no {
+	color: green;
+}
+.motion-yes {
+	color: orangered;
+}
+
+.footer {
+	background-color: #eaeaf1;
+	text-align: center;
+	font-size: 95%;
+	color: #333;
+	margin: 0.5em 0;
+	padding: 0.3em 0;
+}
