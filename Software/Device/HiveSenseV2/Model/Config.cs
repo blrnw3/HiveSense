@@ -82,7 +82,7 @@ namespace HiveSenseV2 {
 			try {
 				int newRate = Int32.Parse( config.getElement( "updateRate" ) );
 				Debug.Print( "new updaterate: " + newRate );
-				if(newRate >= 5) {
+				if(newRate >= 1) {
 					//Timer is set up after this method is called, so this is sufficient
 					Config.updateRate = newRate;
 				}

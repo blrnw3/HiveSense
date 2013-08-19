@@ -19,8 +19,8 @@ namespace HiveSenseV2 {
 		/// WARNING: DO NOT use HTTPS - it doesn't work on Gadgeteer! (works fine on native Windows console application).
 		/// </summary>
 		public APIconnector(string APIurl, SensorsHandler sh) {
-			feedPutter = new HttpHandler( APIurl, "PUT", "text/csv" );
-			imgPoster = new HttpHandler( APIurl + "?image", "POST", "application/octet-stream" );
+			feedPutter = new HttpHandler( APIurl + "/feed", "PUT", "application/json" );
+			imgPoster = new HttpHandler( APIurl + "/image", "PUT", "application/octet-stream" );
 			sensorHandle = sh;
 		}
 

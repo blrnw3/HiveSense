@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Net;
 using System.IO;
+using CommandLine;
 
 namespace GadgeteerSimulator {
 	class Program {
@@ -21,11 +22,18 @@ namespace GadgeteerSimulator {
 		/**
 		 * Source of HTTP Send and CreateRequest methods: MSDN C# documentation
 		 */
+		/**
+		 * Source of Command-line arg parsing: http://commandline.codeplex.com/
+		 * 
+		*/
 
 		const string APIkey = "blr2013ucl";
 
-		//static string RESTurl = "http://hivesensenodejs.azurewebsites.net/feed";
-		static string RESTurl = "http://localhost:1337/feed";
+		static string RESTurlPublic = "http://hivesensenodejs.azurewebsites.net";
+		static string RESTurlLocal = "http://localhost:1337";
+		static string RESTurl;
+
+		static bool bigRandom;
 
 		public static void Send( byte[] sample, string url ) {
 			Console.Out.WriteLine( "time: " + DateTime.Now );
@@ -50,7 +58,7 @@ namespace GadgeteerSimulator {
 			//Headers
 			request.UserAgent = "HiveSenseV1 - Gadgeteer UCL";
 			request.ContentLength = sample.Length;
-			request.ContentType = "text/csv";
+			request.ContentType = "application/json";
 			request.Headers.Add( "X-hiveSenseSecurekey", APIkey );
 
 			//Body
@@ -79,9 +87,9 @@ namespace GadgeteerSimulator {
 		static string randomSensorValue( int minInt, int maxInt, int precision ) {
 			double timestamp = System.DateTime.UtcNow.Hour * 60 + System.DateTime.UtcNow.Minute;
 			double baseValue = minInt + (maxInt - minInt) / 1440.0 * timestamp;
-			Console.Out.WriteLine( baseValue );
+			//Console.Out.WriteLine( baseValue );
 			//Increase by small randomly-decided fraction and clean up.
-			int smallness = 25;
+			int smallness = bigRandom ? 8 : 25;
 			return Math.Round( baseValue * (r.NextDouble() / smallness + 1), precision ).ToString();
 		}
 
@@ -103,7 +111,6 @@ namespace GadgeteerSimulator {
 			if(text.Length > 10) {
 				string datastream = jsonWrap( text );
 
-				//string RESTurl = "http://localhost:1337/posty";
 				Send( Encoding.UTF8.GetBytes( datastream ), RESTurl );
 			} else {
 				Console.Out.WriteLine( "No text data to send" );
@@ -198,51 +205,127 @@ namespace GadgeteerSimulator {
 			return (num < 10) ? '0' + num.ToString() : num.ToString();
 		}
 
+		private static void saveDataPoints(Options o) {
+			string[] date = o.date.Split( '/' );
+			var start = new DateTime( Int32.Parse(date[0]), Int32.Parse(date[1]), Int32.Parse(date[2]) );
 
-		static void Main( string[] args ) {
-			
-			if(args.Length == 1 && args[0] == "pic") {
-				RESTurl += "?image";
-				Send( getImageBytesForPOST(), RESTurl );
-			} else if(args.Length == 1 && args[0] == "history") {
-				compileMultipleDatapoints();
-			} else {
+			int[] dates = new int[6];
+			string[] rdp;
+			int cnt = 0;
 
-				if(args.Length > 0 && args[0] == "run" ) {
-					int wait = (args.Length == 2) ? Int32.Parse( args[1] ) : 30;
-					int cnt = 1;
-					int limit = (args.Length == 3) ? Int32.Parse( args[2] ) : 120;
+			while(cnt < o.number) {
+				string line = "";
+				rdp = getRandomDatapoint();
 
-					Console.Out.WriteLine( "Beginning hivesense Gadgeteer simulation.\n" +
-						"System will auto-post a total of " + limit + " random data points at " + wait + "s intervals");
+				dates[0] = start.Year;
+				dates[1] = start.Month;
+				dates[2] = start.Day;
+				dates[3] = start.Hour;
+				dates[4] = start.Minute;
+				dates[5] = start.Second;
 
-					while(cnt <= limit) {
-						Console.Out.WriteLine( "Posting random data point " + cnt + " of " + limit);
-						compileSingleDataPoint();
-						if(cnt < limit) {
-							Console.Out.WriteLine( "waiting " + wait + "s before next post" );
-							System.Threading.Thread.Sleep( wait * 1000 );
-						}
-						cnt++;
-					}
-				} else {
-					int repeat = (args.Length == 0) ? 1 : Int32.Parse(args[0]);
-					for(int i = 1; i <= repeat; i++) {
-						Console.Out.WriteLine( "Posting random data point " + i + " of " + repeat );
-						compileSingleDataPoint();
-						if(i < repeat) {
-							Console.Out.WriteLine( "waiting a short while before next post" );
-							System.Threading.Thread.Sleep( 3000 );
-						}
-					}
-					Console.Out.WriteLine( "All posts sent" );
+				for(int i = 0; i < dates.Length; i++) {
+					line += dates[i] + ",";
 				}
+
+				for(int i = 0; i < rdp.Length; i++) {
+					line += rdp[i];
+					if(i < rdp.Length - 1) {
+						line += ",";
+					}
+				}
+
+				start = start.AddSeconds( o.interval );
+				cnt++;
+
+				Console.Out.WriteLine( line );
 			}
-
-
 		}
 
 
+		static void Main( string[] args ) {
+
+			var options = new Options();
+			if(CommandLine.Parser.Default.ParseArguments( args, options )) {
+
+				RESTurl = options.isLocal ? RESTurlLocal : RESTurlPublic;
+
+				if(options.isImage) {
+					RESTurl += "/image";
+					Send( getImageBytesForPOST(), RESTurl );
+				}
+				else if(options.save) {
+					bigRandom = true;
+					saveDataPoints(options);
+				}
+				else {
+					RESTurl += "/feed";
+					bigRandom = false;
+
+					if(options.isHistory) {
+						compileMultipleDatapoints();
+					}
+					else {
+						int wait = options.interval;
+						int limit = options.number;
+						int cnt = 1;
+
+						Console.Out.WriteLine( "Beginning hivesense Gadgeteer simulation.\n" +
+							"System will auto-post a total of " + limit + " random data points at " + wait + "s intervals" );
+
+						while(cnt <= limit) {
+							Console.Out.WriteLine( "Posting random data point " + cnt + " of " + limit );
+							compileSingleDataPoint();
+							if(cnt < limit) {
+								Console.Out.WriteLine( "waiting " + wait + "s before next post" );
+								System.Threading.Thread.Sleep( wait * 1000 );
+							}
+							cnt++;
+						}		
+						Console.Out.WriteLine( "All posts sent" );	
+					}
+
+				}
+			} else {
+				Console.Out.WriteLine( "WTF?" );
+			}
+
+		}
+
+	}
+
+
+	class Options {
+		[Option( 'l', "local", HelpText = "Use localhost rather than WWW" )]
+		public bool isLocal { get; set; }
+
+		[Option( 'i', "interval", DefaultValue = 60, HelpText = "Frequency of transmission." )]
+		public int interval { get; set; }
+
+		[Option( 'n', "number", DefaultValue = 60, HelpText = "Number of points to transmit." )]
+		public int number { get; set; }
+
+		[Option( 'h', "history", HelpText = "Load from historical log rather than do live sim." )]
+		public bool isHistory { get; set; }
+
+		[Option( 'b', "image", HelpText = "Send an image." )]
+		public bool isImage { get; set; }
+
+		[Option( 's', "save", HelpText = "Save data points to text file rather than transmit them." )]
+		public bool save { get; set; }
+
+		[Option( 'd', "date", HelpText = "Start date for saving data points" )]
+		public string date { get; set; }
+
+		[HelpOption]
+		public string GetUsage() {
+			// this without using CommandLine.Text
+			//  or using HelpText.AutoBuild
+			var usage = new StringBuilder();
+			usage.AppendLine( "Quickstart Application 1.0" );
+			usage.AppendLine( "Read user manual for usage instructions..." );
+			return usage.ToString();
+		}
 	}
 
 }

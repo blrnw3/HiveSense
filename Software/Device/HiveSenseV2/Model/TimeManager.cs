@@ -22,7 +22,9 @@ namespace HiveSenseV2 {
 		}
 		void syncResponseHandle( HttpRequest sender, HttpResponse response ) {
 			long webTime = long.Parse( response.Text );
-			systemTime = systemTime.AddSeconds( webTime );
+			if(systemTime.Year == 1970) {
+				systemTime = systemTime.AddSeconds( webTime );
+			}
 			Debug.Print( "new datetime is " + systemTime.ToString( "HH:mm dd MM yyyy z" ) );
 		}
 

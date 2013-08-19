@@ -11,6 +11,6 @@
   <!-- Movement detection threshold: -7.9 is most sensitive, +7.9 is least -->
   <sensitivity>-7</sensitivity>
 
-  <!-- URL of the web server running the API to receive the data -->
-  <server>http://hivesensenodejs.azurewebsites.net/posty</server>
+  <!-- URL of the web server running the API to receive the data. Specify the base for the API. -->
+  <server>http://hivesensenodejs.azurewebsites.net</server>
 </config>
