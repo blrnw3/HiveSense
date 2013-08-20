@@ -116,22 +116,21 @@ namespace HiveSenseV2 {
 				if(sdIn.Length < 100) {
 					Debug.Print( "No significant logged data to be sent" );
 				} else {
-					//byte[] block = new byte[4000]; // 100 lines at a time (approx)
-					int successfulSends = 0;
-					int allSends = 0;
 					var line = new System.Text.StringBuilder(50);
-					int lineBlockSize = 100;
-					string[] lines = new string[lineBlockSize];
+					//Number of data points to transmit per update cycle, as determined by stress testing
+					//Too many causes local memory problems, and may overwhelm the server
+					int chunkSize = 100;
+					string[] lines = new string[chunkSize];
 					int pointer = 0;
 
 					int b;
-					while((b = sdIn.ReadByte()) != -1) {
+					while( pointer < chunkSize && ( b = sdIn.ReadByte()) != -1 ) {
 						char next = (char) b;
 						if(next == '\n' && line.Length > 1) {
 							lines[pointer] = line.ToString();
 
 							if(sensorHandle.getChannelNames().Length + 6 != line.ToString().Split(',').Length) {
-								Debug.Print( "Buffer contains mixed up data - number of logged variables is not constant" );
+								Debug.Print( "Buffer contains unexpected data - number of logged variables is not correct" );
 								Debug.Print( "Deleting buffer now" );
 								disposeOfSD( sdIn );
 								deleteBufferLog();
@@ -140,39 +139,52 @@ namespace HiveSenseV2 {
 
 							pointer++;
 							line.Clear();
-							if(pointer == lineBlockSize) {
-								Debug.Print( lines[0] );
-								Debug.Print( lines[lineBlockSize - 1] );
-								successfulSends += api.sendHistoricalData( lines ) ? 1 : 0;
-								allSends++;
-								lines = new string[lineBlockSize];
-								pointer = 0;
-							}
 						} else {
 							line.Append( next );
 						}
 					}
-					Debug.Print( lines[0] );
-					Debug.Print( lines[pointer - 1] );
-					successfulSends += api.sendHistoricalData( lines ) ? 1 : 0;
-					allSends++;
 
-					disposeOfSD(sdIn);
-
-					if(allSends == successfulSends) {
-						//Succesfull transmission - reset the log
-						deleteBufferLog();
-					} else {
-						Debug.Print( "Error sending some logged data - trying again shortly. Successes: " +
-							successfulSends + ", All: " + allSends );
+					Debug.Print( "first line of buffer: " + lines[0] );
+					Debug.Print( "last line available: " + lines[pointer-1] );
+					if( api.sendHistoricalData(lines) ) {
+					
+						if(pointer == chunkSize) {
+							//more lines in buffer so delete succesfully-transferred lines from buffer
+							// through elaborate copying process
+							string tempPath = hivesenseDirectory + "temp.csv";
+							//write rest of buffer to temp
+							writeBuffer( tempPath, sdIn );
+							//delete entire buffer
+							deleteBufferLog();
+							//write temp to newly-empty buffer
+							writeBuffer( datalogFilePathBuffer, sdCard.GetStorageDevice().OpenRead( tempPath ) );
+							datalogBufferExists = true;
+							//delete temp
+							sdCard.GetStorageDevice().Delete( tempPath );
+						} else {
+							disposeOfSD( sdIn );
+							deleteBufferLog();
+						}
 					}
 				}
 
-			} catch {
+			} finally {
 				if(sdIn != null) {
 					disposeOfSD( sdIn );
 				}
-				Debug.Print( "SDcard read FAIL" );
+			}
+		}
+
+		private void writeBuffer( string bufferWrite, System.IO.FileStream bufferRead ) {
+			using(System.IO.FileStream bufferOut = sdCard.GetStorageDevice().OpenWrite( bufferWrite )) {
+				short bufferStreamSize = 1024;
+				byte[] bb = new byte[bufferStreamSize];
+				int bytesRead = 0;
+				while((bytesRead = bufferRead.Read( bb, 0, bufferStreamSize )) != 0) {
+					bufferOut.Write( bb, 0, bytesRead );
+				}
+				disposeOfSD( bufferOut );
+				disposeOfSD( bufferRead );
 			}
 		}
 

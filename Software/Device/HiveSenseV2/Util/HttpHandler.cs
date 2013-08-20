@@ -58,9 +58,9 @@ namespace HiveSenseV2 {
 				(HttpWebResponse) request.GetResponse()) {
 					result = HandleResponse( response );
 				}
-				return result == "200"; //Client succesfully sent data, AND server processed it succesfully
+				return Int32.Parse(result) < 500; //No server errors
 			} catch {
-				Debug.Print( "CLIENT SENDING ERROR" );
+				Debug.Print( "Server error" );
 				return false;
 			}
 		}

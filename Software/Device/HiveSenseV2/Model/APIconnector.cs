@@ -39,11 +39,15 @@ namespace HiveSenseV2 {
 			foreach(string dataLine in dataLines) {
 				if(dataLine != null && dataLine.Length > 10) {
 					fields = dataLine.Split( ',' );
-					Debug.Print( "currmin: " + fields[4] );
+					var fieldsNum = new int[6];
+					for(int i = 0; i < data.Length; i++) {
+						fieldsNum[i] = Int32.Parse( fields[i] );
+					}
+					//Debug.Print( "currmin: " + fields[4] );
 
 					//Create timestamp in ISO format
-					timestamp = fields[0] + '-' + fields[1] + '-' + fields[2] + 'T' +
-						fields[3] + ':' + fields[4] + ':' + fields[5] + "Z";
+					timestamp = new DateTime( fieldsNum[0], fieldsNum[1], fieldsNum[2],
+						fieldsNum[3], fieldsNum[4], fieldsNum[5] ).ToString();
 
 					for(int i = 0; i < data.Length; i++) {
 						data[i] = fields[i + 6];

@@ -24,7 +24,7 @@ namespace HiveSenseV2 {
 	//	public const int reSyncInterval = 20;
 
 		/// <summary>
-		/// Reliable source for syncronising the Device clock
+		/// Reliable source for synchronising the Device clock
 		/// </summary>
 		public const string timeServer = "http://wxapp.nw3weather.co.uk/API/SQLdown.php?time";
 
@@ -69,6 +69,9 @@ namespace HiveSenseV2 {
 			APIendpoint = "";
 		}
 
+		//As determined by stress testing
+		private static int maxFrequency = 5;
+
 		public static void updateSettingsFromXml( Xml config ) {
 
 			Config.desiredSSID = config.getElement( "SSID" );
@@ -82,7 +85,7 @@ namespace HiveSenseV2 {
 			try {
 				int newRate = Int32.Parse( config.getElement( "updateRate" ) );
 				Debug.Print( "new updaterate: " + newRate );
-				if(newRate >= 1) {
+				if(newRate >= maxFrequency) {
 					//Timer is set up after this method is called, so this is sufficient
 					Config.updateRate = newRate;
 				}
@@ -93,6 +96,7 @@ namespace HiveSenseV2 {
 			try {
 				double newSensitivity = Double.Parse( config.getElement( "sensitivity" ) );
 				Debug.Print( "new sensitivity: " + newSensitivity );
+				// 8 is the magic number given by the accelerometer SDK docs.
 				if(newSensitivity > -8 && newSensitivity < 8) {
 					Config.movementSensitivity = newSensitivity;
 				}
