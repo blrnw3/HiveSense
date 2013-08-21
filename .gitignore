@@ -2,9 +2,14 @@ Resources/SampleReports/
 Resources/misc/
 Resources/Hardware_res/
 Report/researchPapers/
+Software/DeviceSim/packages/
 
 bin/
 obj/
 
 *.tinyfnt
 *.suo
+*.csv
+*.config
+
+*$*
