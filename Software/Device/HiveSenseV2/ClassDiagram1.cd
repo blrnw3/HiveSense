@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+<ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="HiveSenseV2.APIconnector">
-    <Position X="4.5" Y="2.75" Width="2.5" />
+    <Position X="5.25" Y="2.75" Width="1.75" />
     <Members>
       <Method Name="APIconnector" Hidden="true" />
       <Method Name="dataLineToAPIFormat" Hidden="true" />
@@ -14,12 +14,13 @@
     </TypeIdentifier>
   </Class>
   <Class Name="HiveSenseV2.HttpHandler">
-    <Position X="6.25" Y="6.25" Width="2" />
+    <Position X="5.25" Y="5.5" Width="1.75" />
     <Members>
       <Method Name="CreateRequest" Hidden="true" />
       <Method Name="HandleResponse" Hidden="true" />
       <Method Name="HttpHandler" Hidden="true" />
       <Method Name="Send" Hidden="true" />
+      <Field Name="timeOutPeriod" Hidden="true" />
     </Members>
     <TypeIdentifier>
       <HashCode>ABAAgAABAAgAAAQgAEAAAAAAAAAIAAAAAAAAAAAAAAA=</HashCode>
@@ -27,7 +28,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="HiveSenseV2.Program">
-    <Position X="6" Y="0.5" Width="2.75" />
+    <Position X="6.75" Y="0.5" Width="2.5" />
     <Members>
       <Field Name="accelerometer" Hidden="true" />
       <Field Name="api" Hidden="true" />
@@ -35,6 +36,7 @@
       <Field Name="button" Hidden="true" />
       <Method Name="buttonPressed" Hidden="true" />
       <Field Name="camera" Hidden="true" />
+      <Field Name="dataCount" Hidden="true" />
       <Method Name="dataIsSendable" Hidden="true" />
       <Method Name="InitializeModules" Hidden="true" />
       <Field Name="lightSensor" Hidden="true" />
@@ -56,10 +58,11 @@
     </TypeIdentifier>
   </Class>
   <Class Name="HiveSenseV2.SdHandler">
-    <Position X="1.75" Y="2.75" Width="2.5" />
+    <Position X="3" Y="2.75" Width="2" />
     <Members>
       <Field Name="api" Hidden="true" />
       <Field Name="configFilePath" Hidden="true" />
+      <Property Name="datalogBufferExists" Hidden="true" />
       <Field Name="dateVariables" Hidden="true" />
       <Method Name="deleteBufferLog" Hidden="true" />
       <Method Name="disposeOfSD" Hidden="true" />
@@ -68,14 +71,15 @@
       <Method Name="sdCard_SDCardUnmounted" Hidden="true" />
       <Method Name="SdHandler" Hidden="true" />
       <Field Name="sensorHandle" Hidden="true" />
+      <Method Name="writeDataLineToSDcard" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>AAQABAAAAAggIAACAQAAAAAQCAEAACIgACACIAgAAAA=</HashCode>
+      <HashCode>AAQABAAAAAgAMAACAQAAAAAQCACAACIgACACIAgAAAA=</HashCode>
       <FileName>Model\SdHandler.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="HiveSenseV2.SensorsHandler">
-    <Position X="9.75" Y="2.75" Width="2.5" />
+    <Position X="7.25" Y="2.75" Width="2" />
     <Members>
       <Method Name="accelerometer_ThresholdExceeded" Hidden="true" />
       <Field Name="accelSensor" Hidden="true" />
@@ -102,8 +106,9 @@
     </TypeIdentifier>
   </Class>
   <Class Name="HiveSenseV2.TimeManager">
-    <Position X="12.5" Y="2.75" Width="2" />
+    <Position X="9.5" Y="4.5" Width="1.5" />
     <Members>
+      <Method Name="resyncIfOld" Hidden="true" />
       <Method Name="syncResponseHandle" Hidden="true" />
       <Method Name="TimeManager" Hidden="true" />
     </Members>
@@ -113,7 +118,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="HiveSenseV2.Utility">
-    <Position X="12.75" Y="6.75" Width="2.25" />
+    <Position X="8" Y="7.75" Width="1.5" />
     <Members>
       <Method Name="ByteToHex" Hidden="true" />
       <Method Name="GetMACAddress" Hidden="true" />
@@ -124,30 +129,31 @@
     </TypeIdentifier>
   </Class>
   <Class Name="HiveSenseV2.WifiHandler">
-    <Position X="7.25" Y="2.75" Width="2.25" />
+    <Position X="9.75" Y="2.75" Width="2.25" />
     <Members>
+      <Method Name="attemptJoin" Hidden="true" />
       <Method Name="getWifiChipMACAddress" Hidden="true" />
-      <Method Name="joinNetwork" Hidden="true" />
       <Method Name="networkScanDebug" Hidden="true" />
       <Field Name="timemanager" Hidden="true" />
       <Method Name="timerWifiJoin_Tick" Hidden="true" />
+      <Method Name="WifiHandler" Hidden="true" />
       <Field Name="wifiModule" Hidden="true" />
       <Method Name="wirelessConnectivityChanged" Hidden="true" />
     </Members>
     <TypeIdentifier>
-      <HashCode>AAAASAAAAAIAAAAAAAAAAAAAAIAQAAAAABCAAAAAAAg=</HashCode>
+      <HashCode>AAAQSAAAAAIAAAAAAAAAAAAAAIAQAAAAABAAAAAAAAg=</HashCode>
       <FileName>Model\WifiHandler.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="HiveSenseV2.Xml">
-    <Position X="4.25" Y="6.25" Width="1.75" />
+    <Position X="6" Y="7.75" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAA=</HashCode>
       <FileName>Util\Xml.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="HiveSenseV2.Channel">
-    <Position X="10" Y="5.25" Width="1.75" />
+    <Position X="7.25" Y="5.5" Width="1.75" />
     <Members>
       <Method Name="Channel" Hidden="true" />
     </Members>
@@ -157,11 +163,17 @@
     </TypeIdentifier>
   </Class>
   <Class Name="HiveSenseV2.Config">
-    <Position X="1.25" Y="6.25" Width="2.5" />
+    <Position X="3" Y="5.5" Width="2" />
+    <Members>
+      <Field Name="APIsecurityKey" Hidden="true" />
+      <Field Name="maxFrequency" Hidden="true" />
+      <Field Name="rebootInterval" Hidden="true" />
+      <Field Name="timeServer" Hidden="true" />
+    </Members>
     <TypeIdentifier>
-      <HashCode>AAAAAAIAAAIIAAAAAAABAAAAAMABAAAAQAAAAAAACEA=</HashCode>
+      <HashCode>AAAAAAIAAAAIAAAAAAABAAAQAMABAAAAQAAAAAAACkA=</HashCode>
       <FileName>Model\Config.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Font Name="Segoe UI" Size="9" />
+  <Font Name="Segoe UI" Size="10" />
 </ClassDiagram>

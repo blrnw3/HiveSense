@@ -72,7 +72,7 @@ namespace HiveSenseV2 {
 		//As determined by stress testing
 		private static int maxFrequency = 5;
 
-		public static void updateSettingsFromXml( Xml config ) {
+		public static void getXmlSettings( Xml config ) {
 
 			Config.desiredSSID = config.getElement( "SSID" );
 			Debug.Print( "new SSID: " + Config.desiredSSID );

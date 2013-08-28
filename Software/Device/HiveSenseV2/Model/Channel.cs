@@ -6,6 +6,7 @@ namespace HiveSenseV2 {
 
 		public string name { get; protected set; }
 		public int precision { get; protected set; }
+
 		public double currentValue { get; set; }
 
 		public Channel( string name, int precision ) {
@@ -13,6 +14,5 @@ namespace HiveSenseV2 {
 			this.precision = precision;
 		}
 
-		//public abstract double getCurrentValue;
 	}
 }

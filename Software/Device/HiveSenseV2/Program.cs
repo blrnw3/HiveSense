@@ -62,7 +62,7 @@ namespace HiveSenseV2 {
 				wifi_RS21.Interface.Disconnect();
 			} else {
 				Debug.Print( "Connecting to wifi" );
-				wifiHandle.searchAndJoinNetwork();
+				wifiHandle.joinNetwork();
 			}
 		}
 
@@ -83,10 +83,10 @@ namespace HiveSenseV2 {
 			Debug.Print( "Measurements being taken at : " + timeManager.getTime() );
 
 			var dataNum = sensorsHandle.readNumericSensors();
-			sdHandle.writeDataLineToSDcard( dataNum, SdHandler.datalogFilePathPermanent, timeManager.getTime() );
+			sdHandle.writeDataLineToSDcard( dataNum, SdHandler.datalogFilePathPerm, timeManager.getTime() );
 
 			if(dataIsSendable() && api.sendCurrentData( dataNum )) {
-				sdHandle.sendSDloggedDataToWeb();
+				sdHandle.transmitSDloggedData();
 				timeManager.resyncIfOld();
 
 			} else {

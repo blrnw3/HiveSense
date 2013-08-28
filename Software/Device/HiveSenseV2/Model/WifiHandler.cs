@@ -30,7 +30,7 @@ namespace HiveSenseV2 {
 			// these two calls becasue GHI say so
 			wifiModule.UseDHCP();
 			NetworkInterfaceExtension.AssignNetworkingStackTo( wifiModule.Interface );
-			searchAndJoinNetwork();
+			joinNetwork();
 
 			// Timer to retry if failed on startup, or network goes down.
 			timerWifiJoin = new GT.Timer( 600000 ); //10-mins
@@ -45,14 +45,14 @@ namespace HiveSenseV2 {
 		/// that matches the config-specified SSID
 		/// </summary>
 		/// <remarks>Strongest signals are found first, so the best connection is always used</remarks>
-		public void searchAndJoinNetwork() {
+		public void joinNetwork() {
 			// search for all available networks
 			WiFiNetworkInfo[] scanResults = wifiModule.Interface.Scan();
 			//search for the desired network
 			Debug.Print( "Searching for SSID" );
 			foreach(WiFiNetworkInfo result in scanResults) {
 				if(result.SSID == Config.desiredSSID) {
-					joinNetwork( result );
+					attemptJoin( result );
 					break;
 				}
 			}
@@ -62,7 +62,7 @@ namespace HiveSenseV2 {
 		/// Try to join a wifi network
 		/// </summary>
 		/// <param name="network">desired network</param>
-		void joinNetwork( WiFiNetworkInfo network ) {
+		void attemptJoin( WiFiNetworkInfo network ) {
 			try {
 				wifiModule.Interface.Join( network, Config.wifiPass );
 				Debug.Print( "Network joined" );
@@ -74,7 +74,7 @@ namespace HiveSenseV2 {
 		void timerWifiJoin_Tick( GT.Timer timer ) {
 			//poll in case of connection loss so device can (re)join
 			if(!wifiModule.IsNetworkConnected) {
-				searchAndJoinNetwork();
+				joinNetwork();
 			}
 		}
 

@@ -22,7 +22,7 @@ namespace HiveSenseV2 {
 		/// <summary>
 		/// Never overwritten or read - just for purposes of keeping data in one place for the permanent record
 		/// </summary>
-		public readonly static string datalogFilePathPermanent = hivesenseDirectory + "datalogAlways.csv";
+		public readonly static string datalogFilePathPerm = hivesenseDirectory + "datalogAlways.csv";
 
 		/// <summary>
 		/// Date fields to save in the permanent log
@@ -99,7 +99,7 @@ namespace HiveSenseV2 {
 		/// Transmitts data from a logfile to an HTTP server; this is done in manageable batches to reduce errors.<br />
 		/// WARNING: The logfile buffer is deleted upon succesful transmission
 		/// </summary>
-		public void sendSDloggedDataToWeb() {
+		public void transmitSDloggedData() {
 			if(!sdCard.IsCardMounted) {
 				Debug.Print( "SD card not mounted. Cannot proceed" );
 				return;
@@ -219,7 +219,7 @@ namespace HiveSenseV2 {
 				bool datalogExists = false;
 				foreach(string file in sdFiles) {
 					Debug.Print( file );
-					if(file.ToLower() == datalogFilePathPermanent.ToLower()) {
+					if(file.ToLower() == datalogFilePathPerm.ToLower()) {
 						datalogExists = true;
 					} else if(file.ToLower() == datalogFilePathBuffer.ToLower()) {
 						datalogBufferExists = true;
@@ -227,11 +227,11 @@ namespace HiveSenseV2 {
 				}
 				//write some helpful starter column headings into the permanent log
 				if(!datalogExists) {
-					sdCard.GetStorageDevice().WriteFile( datalogFilePathPermanent,
+					sdCard.GetStorageDevice().WriteFile( datalogFilePathPerm,
 						System.Text.Encoding.UTF8.GetBytes( Utility.csvJoin( dateVariables ) +
 							"," + Utility.csvJoin( sensorHandle.getChannelNames() ) + '\n' ) 
 					);
-					Debug.Print( "Datalogpermanent not found. CREATED on SD at " + datalogFilePathPermanent );
+					Debug.Print( "Datalogpermanent not found. CREATED on SD at " + datalogFilePathPerm );
 				} else {
 					Debug.Print( "Datalogpermanent exists" );
 				}
@@ -246,7 +246,7 @@ namespace HiveSenseV2 {
 		void getConfig() {
 			try {
 				var xml = new Xml( sdCard.GetStorageDevice().ReadFile( configFilePath ) );
-				Config.updateSettingsFromXml( xml );
+				Config.getXmlSettings( xml );
 				api = new APIconnector( Config.APIendpoint, sensorHandle );
 
 			} catch {
