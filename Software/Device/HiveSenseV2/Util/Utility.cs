@@ -45,6 +45,12 @@ namespace HiveSenseV2 {
 			return csv.Substring( 0, csv.Length - 1 );
 		}
 
+		/// <summary>
+		/// Round a numeric value to a fixed number of decimal places
+		/// </summary>
+		/// <param name="d">Numeric value</param>
+		/// <param name="dp">Number of decimal places to keep</param>
+		/// <returns>Rounded value</returns>
 		public static string roundToDp( double d, int dp ) {
 			string s = d.ToString();
 			if(s.IndexOf( '.' ) == -1) {

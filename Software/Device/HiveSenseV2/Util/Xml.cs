@@ -2,9 +2,11 @@ using System;
 
 namespace HiveSenseV2 {
 	/// <summary>
-	/// Very basic XML file reader
+	/// Very basic XML reader
 	/// </summary>
-	/// <remarks>Necessitated by the abscence of such functionality in the core .NET MF libraries </remarks>
+	/// <remarks>Necessitated by the abscence of such functionality in the core .NET MF libraries<br />
+	/// UPDATE: Actually, I found an XML reader, eventually, but I'd already written this so it's staying.
+	/// </remarks>
 	class Xml {
 
 		private string xml;

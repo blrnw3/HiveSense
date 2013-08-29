@@ -8,6 +8,7 @@ namespace HiveSenseV2 {
 	/// <summary>
 	/// Handler for making generic HTTP POST/PUT requests
 	/// </summary>
+	/// <remarks>The response body is deliberately ignored</remarks>
 	class HttpHandler {
 
 		string url;
@@ -20,6 +21,12 @@ namespace HiveSenseV2 {
 		/// </summary>
 		int timeOutPeriod;
 
+		/// <summary>
+		/// Creates a handler
+		/// </summary>
+		/// <param name="url">URL to which requests are made</param>
+		/// <param name="method">HTTP method (PUT, POST etc.)</param>
+		/// <param name="mime">HTTP Media type (JSON, CSV etc.)</param>
 		public HttpHandler( string url, string method, string mime ) {
 			this.url = url;
 			this.methodType = method;
@@ -89,6 +96,9 @@ namespace HiveSenseV2 {
 			return request;
 		}
 
+		/// <summary>
+		/// Gets just the status code from the response, ignoring everything else
+		/// </summary>
 		private string HandleResponse( HttpWebResponse response ) {
 			string statCode = response.StatusCode.ToString();
 			Debug.Print( "Status code: " + statCode );

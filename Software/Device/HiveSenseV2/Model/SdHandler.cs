@@ -11,8 +11,14 @@ namespace HiveSenseV2 {
 	/// </summary>
 	class SdHandler {
 
+		/// <summary>
+		/// Main directory for storing all data
+		/// </summary>
 		const string hivesenseDirectory = "hivesense\\";
 
+		/// <summary>
+		/// Path of the XML configuration file
+		/// </summary>
 		readonly static string configFilePath = hivesenseDirectory + "config.xml";
 
 		/// <summary>
@@ -25,7 +31,7 @@ namespace HiveSenseV2 {
 		public readonly static string datalogFilePathPerm = hivesenseDirectory + "datalogAlways.csv";
 
 		/// <summary>
-		/// Date fields to save in the permanent log
+		/// Datetime fields to save in the permanent log
 		/// </summary>
 		/// <remarks>These will appear as date headings for the first line of the logfile</remarks>
 		private static readonly string[] dateVariables = { "year", "month", "day", "hour", "minute", "second" };
@@ -126,6 +132,7 @@ namespace HiveSenseV2 {
 					int b;
 					while( pointer < chunkSize && ( b = sdIn.ReadByte()) != -1 ) {
 						char next = (char) b;
+						//new, non-empty line
 						if(next == '\n' && line.Length > 1) {
 							lines[pointer] = line.ToString();
 
@@ -146,6 +153,7 @@ namespace HiveSenseV2 {
 
 					Debug.Print( "first line of buffer: " + lines[0] );
 					Debug.Print( "last line available: " + lines[pointer-1] );
+					//Try to send chunk to API
 					if( api.sendHistoricalData(lines) ) {
 					
 						if(pointer == chunkSize) {

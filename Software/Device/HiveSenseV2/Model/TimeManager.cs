@@ -3,6 +3,9 @@ using Microsoft.SPOT;
 using Gadgeteer.Networking;
 
 namespace HiveSenseV2 {
+	/// <summary>
+	/// Manager for the Device system clock
+	/// </summary>
 	class TimeManager {
 
 		private DateTime systemTime;
@@ -13,8 +16,7 @@ namespace HiveSenseV2 {
 		}
 
 		/// <summary>
-		/// Tries to sync the system time with a UTC web time server<br />
-		/// Source: GHI docs
+		/// Tries to sync the system time with a UTC web time server
 		/// </summary>
 		public void syncTime() {
 			HttpRequest wc = WebClient.GetFromWeb( Config.timeServer );
@@ -35,10 +37,16 @@ namespace HiveSenseV2 {
 			}
 		}
 
+		/// <summary>
+		/// Advance the clock
+		/// </summary>
 		public void updateTime() {
 			systemTime = systemTime.AddSeconds( Config.updateRate );
 		}
 
+		/// <summary>
+		/// Get the current system time
+		/// </summary>
 		public DateTime getTime() {
 			return systemTime;
 		}

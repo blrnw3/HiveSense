@@ -3,6 +3,15 @@ using GT = Gadgeteer;
 using Gadgeteer.Modules.GHIElectronics;
 
 namespace HiveSenseV2 {
+	/// <summary>
+	/// Main
+	/// </summary>
+	/// <remarks>
+	/// In other classes, references are sometimes made to "GHI documentation";
+	/// this is found here: https://www.ghielectronics.com/docs/,
+	/// and consists of SDK documentation for the Gadgeteer modules, with short code samples,
+	/// some of which have been incorporated into this source code.
+	/// </remarks>
 	public partial class Program {
 		uint dataCount = 0;
 
@@ -13,6 +22,9 @@ namespace HiveSenseV2 {
 		TimeManager timeManager;
 		APIconnector api;
 
+		/// <summary>
+		/// Called on Device boot
+		/// </summary>
 		void ProgramStarted() {
 			Debug.Print( "Program Started" );
 
@@ -82,19 +94,24 @@ namespace HiveSenseV2 {
 			button.TurnLEDOn();
 			Debug.Print( "Measurements being taken at : " + timeManager.getTime() );
 
+			//Get data point and write to permanent log
 			var dataNum = sensorsHandle.readNumericSensors();
 			sdHandle.writeDataLineToSDcard( dataNum, SdHandler.datalogFilePathPerm, timeManager.getTime() );
 
+			//Attempt to transmit data point to web API
 			if(dataIsSendable() && api.sendCurrentData( dataNum )) {
+				//Transmit buffer (if present)
 				sdHandle.transmitSDloggedData();
 				timeManager.resyncIfOld();
 
 			} else {
+				//Buffer to data point
 				Debug.Print( "Data could not be sent to server! Writing to SD card instead" );
 				sdHandle.writeDataLineToSDcard( dataNum, SdHandler.datalogFilePathBuffer, timeManager.getTime() );
 				sdHandle.datalogBufferExists = true;
 			}
 
+			//Attempt to transmit binary data (the camera image)
 			var dataBin = sensorsHandle.readBinarySensors();
 			if(dataIsSendable()) {
 				api.sendImage( dataBin );

@@ -5,7 +5,7 @@ using Microsoft.SPOT;
 
 namespace HiveSenseV2 {
 	/// <summary>
-	/// Handler for interacting with an API
+	/// Handler for interacting with a web API
 	/// </summary>
 	class APIconnector {
 
@@ -15,9 +15,12 @@ namespace HiveSenseV2 {
 		SensorsHandler sensorHandle;
 
 		/// <summary>
-		/// URL to which the data should be sent
-		/// WARNING: DO NOT use HTTPS - it doesn't work on Gadgeteer! (works fine on native Windows console application).
+		/// Create a connection to the API for binary and numeric data
 		/// </summary>
+		/// <param name="APIurl">URL to which the data should be sent<br />
+		/// WARNING: DO NOT use HTTPS - it doesn't work on Gadgeteer! (works fine on native Windows console application).
+		///</param>
+		/// <param name="sh"></param>
 		public APIconnector(string APIurl, SensorsHandler sh) {
 			feedPutter = new HttpHandler( APIurl + "/feed", "PUT", "application/json" );
 			imgPoster = new HttpHandler( APIurl + "/image", "PUT", "application/octet-stream" );
@@ -27,7 +30,7 @@ namespace HiveSenseV2 {
 		/// <summary>
 		/// Sends buffered data to the API
 		/// </summary>
-		/// <param name="dataLines">full csv data lines, one for each time interval</param>
+		/// <param name="dataLines">full csv data lines, one for each data point</param>
 		/// <returns><c>true</c> on success (complete transmission), <c>false</c> on failure</returns>
 		public bool sendHistoricalData( string[] dataLines ) {
 			var compiledData = new System.Text.StringBuilder( dataLines.Length * dataLines[0].Length );
@@ -36,15 +39,15 @@ namespace HiveSenseV2 {
 			string timestamp;
 
 			int validCnt = 0;
+
 			foreach(string dataLine in dataLines) {
-				if(dataLine != null && dataLine.Length > 10) {
+				if(dataLine != null && dataLine.Length > 10) { //Check for valid line
 					fields = dataLine.Split( ',' );
+					//parse datetime info
 					var fieldsNum = new int[6];
-					for(int i = 0; i < data.Length; i++) {
+					for(int i = 0; i < fieldsNum.Length; i++) {
 						fieldsNum[i] = Int32.Parse( fields[i] );
 					}
-					//Debug.Print( "currmin: " + fields[4] );
-
 					//Create timestamp in ISO format
 					timestamp = new DateTime( fieldsNum[0], fieldsNum[1], fieldsNum[2],
 						fieldsNum[3], fieldsNum[4], fieldsNum[5] ).ToString();
@@ -53,7 +56,8 @@ namespace HiveSenseV2 {
 						data[i] = fields[i + 6];
 					}
 
-					if(fields[0] != "1970") { //default year when not time-synced
+					//Reject data point if not time-synced
+					if(fields[0] != "1970") {
 						compiledData.Append( dataLineToAPIFormat( data, timestamp ) + "," );
 						validCnt++;
 					}
@@ -62,9 +66,12 @@ namespace HiveSenseV2 {
 			return (validCnt > 0) ?
 				feedPutter.Send( jsonWrap(compiledData.ToString().Substring(0, compiledData.Length-1) ))
 				: true;
-			//return true;
 		}
 
+		/// <summary>
+		/// Transmitts the current image to the API
+		/// </summary>
+		/// <param name="pic">binary img data</param>
 		public void sendImage( byte[] pic ) {
 			imgPoster.Send( pic );
 		}
@@ -84,7 +91,7 @@ namespace HiveSenseV2 {
 		/// </summary>
 		/// <param name="data">raw, but cleaned (of excess precision), data</param>
 		/// <param name="timestamp">timestamp of the data - use empty string to ignore this</param>
-		/// <returns>compatible compiled data</returns>
+		/// <returns>API-compatible compiled data</returns>
 		private string dataLineToAPIFormat( string[] data, string timestamp ) {
 			string compiledData = "{\"channels\":{";
 			string[] channels = sensorHandle.getChannelNames();
@@ -108,10 +115,6 @@ namespace HiveSenseV2 {
 
 		private string jsonWrap( string jsonDatapoints ) {
 			return "{\"datapoints\":[" + jsonDatapoints + "]}";
-		}
-
-		private string zerolead( string i ) {
-			return (Int32.Parse( i ) < 10) ? '0' + i : i;
 		}
 
 	}

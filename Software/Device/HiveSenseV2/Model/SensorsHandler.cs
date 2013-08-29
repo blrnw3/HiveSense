@@ -12,7 +12,7 @@ namespace HiveSenseV2 {
 	class SensorsHandler {
 
 		/**
-		 * Sensor modules (note well that there may be more than one channel per sensor)
+		 * Sensor modules (note well that there may be more than one measurement channel per sensor)
 		 **/
 		LightSensor lightSensor;
 		Accelerometer accelSensor;
@@ -22,7 +22,7 @@ namespace HiveSenseV2 {
 
 		/**
 		* Sensor Channels (individual numeric variables) - one for each measurement property/variable to use<br />
-		* Names are primarily used as identifiers for the API, but are also used by the data point logfiles
+		* Names are primarily used as identifiers for the API, but are also used by the data point logfile/buffers
 		**/
 		Channel t1 = new Channel( "temp1", 1 );
 		Channel t2 = new Channel( "temp2", 1 );
@@ -77,7 +77,7 @@ namespace HiveSenseV2 {
 		/// Request or retrieve measurements from all sensors and store cleaned values in
 		/// class members
 		/// </summary>
-		/// <returns>The cleaned class memebers representing each sensor's datum</returns>
+		/// <returns>The cleaned class memebers representing each channels's datum</returns>
 		public string[] readNumericSensors() {
 			tempHumiSensor.RequestMeasurement();
 			temp2Sensor.RequestMeasurement();
@@ -87,6 +87,10 @@ namespace HiveSenseV2 {
 			return getDataPt();
 		}
 
+		/// <summary>
+		/// Compile a data point from the Channels
+		/// </summary>
+		/// <returns>the data point</returns>
 		private string[] getDataPt() {
 			var cleanData = new String[channels.Length];
 			for(int i = 0; i < channels.Length; i++) {
@@ -102,6 +106,9 @@ namespace HiveSenseV2 {
 			camera.TakePicture();
 			return image;
 		}
+
+
+		//Remaining methods are callbacks for the sensor modules
 
 		void accelerometer_ThresholdExceeded( Accelerometer sender ) {
 			Debug.Print( "Hive is moving!" );
@@ -123,11 +130,6 @@ namespace HiveSenseV2 {
 			hum.currentValue = (int) relativeHumidity;
 		}
 
-		/// <summary>
-		/// Handler for when a picture is taken: attempts to POST it to the web
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="picture">raw pic data</param>
 		void pictureCaptured( Camera sender, GT.Picture picture ) {
 			byte[] cameraSnapshot = picture.PictureData;
 			if(cameraSnapshot != null) {

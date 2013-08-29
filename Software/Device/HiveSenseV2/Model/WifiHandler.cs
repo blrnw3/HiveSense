@@ -9,7 +9,7 @@ using GHI.Premium.Net;
 
 namespace HiveSenseV2 {
 	/// <summary>
-	/// Handler for the Wifi-RS21 module
+	/// Handler for the Wi-Fi module
 	/// </summary>
 	class WifiHandler {
 
@@ -30,6 +30,7 @@ namespace HiveSenseV2 {
 			// these two calls becasue GHI say so
 			wifiModule.UseDHCP();
 			NetworkInterfaceExtension.AssignNetworkingStackTo( wifiModule.Interface );
+
 			joinNetwork();
 
 			// Timer to retry if failed on startup, or network goes down.
@@ -91,6 +92,7 @@ namespace HiveSenseV2 {
 		/// <summary>
 		/// Searches for all wifi networks and prints full debug information
 		/// </summary>
+		/// <remarks>Only for debugging purposes; not used in prodcution</remarks>
 		void networkScanDebug() {
 			WiFiNetworkInfo[] scanResults = wifiModule.Interface.Scan();
 			Debug.Print( "Number of results: " + scanResults.Length );
@@ -108,7 +110,7 @@ namespace HiveSenseV2 {
 
 
 		/// <summary>
-		///Get the MAC (physical) address of the connected wifi RS21 module
+		///Get the MAC (physical) address of the connected wifi module
 		/// </summary>
 		/// <returns>formatted MAC address</returns>
 		string getWifiChipMACAddress() {
